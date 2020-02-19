@@ -1,6 +1,6 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from database.models import ApplicantModel, TechSkillModel
+from database.models import ApplicantModel, TechSkillModel, ModalityModel, PositionModel
 
 class ApplicantType(SQLAlchemyObjectType):
     class Meta:
@@ -10,4 +10,14 @@ class ApplicantType(SQLAlchemyObjectType):
 class TechSkillType(SQLAlchemyObjectType):
     class Meta:
         model = TechSkillModel
-        interfaces = (graphene.relay.Node, )
+        interfaces = (graphene.relay.Node,)
+
+class ModalityType(SQLAlchemyObjectType):
+    class Meta:
+        model = ModalityModel
+        interfaces = (graphene.relay.Node,)
+
+class PositionType(SQLAlchemyObjectType):
+    class Meta:
+        model = PositionModel
+        interfaces = (graphene.relay.Node,)
