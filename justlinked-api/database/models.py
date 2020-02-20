@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, DateTime, Table, ForeignKey, Boolean, Float
+from sqlalchemy.exc import DatabaseError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship
 
-from database.session import db_session
+from database.session import db_session as session
 
 
 class BaseModel:
@@ -12,17 +13,34 @@ class BaseModel:
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    def save(self):
-        db_session.add(self)
-        db_session.commit()
-
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
+    def save(self):
+        session.add(self)
+        self._flush()
+        return self
+
+    def update(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+        return self.save()
+
+    def delete(self):
+        session.delete(self)
+        self._flush()
+
+    def _flush(self):
+        try:
+            session.flush()
+        except DatabaseError:
+            session.rollback()
+            raise
+
 
 Base = declarative_base(cls=BaseModel)
-Base.query = db_session.query_property()
+Base.query = session.query_property()
 
 
 class ModalityModel(Base):
