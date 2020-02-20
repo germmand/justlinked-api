@@ -5,7 +5,7 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship
 
-from database.session import db_session as session
+from src.database.session import db_session as session
 
 
 class BaseModel:

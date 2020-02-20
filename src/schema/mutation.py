@@ -2,10 +2,10 @@ from sqlite3 import DatabaseError
 
 import graphene
 
-from database.models import (
+from src.database.models import (
     ApplicantModel,
     GeneralKnowledge, WorkExperience)
-from schema.types import (
+from src.schema.types import (
     ApplicantType
 )
 

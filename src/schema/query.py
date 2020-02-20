@@ -1,5 +1,5 @@
 import graphene
-from schema.types import (
+from src.schema.types import (
     ApplicantType,
     TechSkillType,
     PositionType

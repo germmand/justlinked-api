@@ -1,7 +1,7 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from database.models import (
+from src.database.models import (
     ApplicantModel, TechSkillModel,
     ModalityModel, PositionModel,
     GeneralKnowledge, WorkExperience

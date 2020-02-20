@@ -17,7 +17,7 @@ import sys, os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-import database.config as my_config
+import src.database.config as my_config
 
 config.set_main_option('sqlalchemy.url', my_config.DATABASE_URI)
 
@@ -25,7 +25,7 @@ config.set_main_option('sqlalchemy.url', my_config.DATABASE_URI)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from database.models import Base
+from src.database.models import Base
 
 target_metadata = Base.metadata
 
