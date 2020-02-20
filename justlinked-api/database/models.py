@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from database.session import db_session
 
 
-class BaseModel():
+class BaseModel:
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
@@ -27,7 +27,7 @@ Base.query = db_session.query_property()
 
 class ModalityModel(Base):
     __tablename__ = 'modality'
-    name = Column(String)
+    name = Column(String, nullable=False, unique=True)
     applicants = relationship("ApplicantModel", backref="modality")
     positions = relationship("PositionModel", backref="modality")
 
@@ -66,7 +66,7 @@ class PositionModel(Base):
 class TechSkillModel(Base):
     __tablename__ = 'techskills'
 
-    name = Column(String)
+    name = Column(String, unique=False, nullable=False)
     applicants = relationship("ApplicantModel",
                               secondary=ApplicantTechSkills,
                               backref="techskills")
