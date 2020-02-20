@@ -1,12 +1,12 @@
-"""Add applicant position relationships
+"""Add applicant position.py relationships
 
 Revision ID: ad9dc5e915a1
 Revises: 
 Create Date: 2020-02-19 16:48:01.979445
 
 """
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = 'ad9dc5e915a1'

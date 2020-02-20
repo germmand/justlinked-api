@@ -1,11 +1,7 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from src.database.models import (
-    ApplicantModel, TechSkillModel,
-    ModalityModel, PositionModel,
-    GeneralKnowledge, WorkExperience
-)
+from src.applicants.models import ApplicantModel, WorkExperience, GeneralKnowledge
 
 
 class ApplicantType(SQLAlchemyObjectType):
@@ -25,24 +21,6 @@ class ApplicantType(SQLAlchemyObjectType):
         query = WorkExperienceType.get_query(info)
 
         return query.all()
-
-
-class TechSkillType(SQLAlchemyObjectType):
-    class Meta:
-        model = TechSkillModel
-        interfaces = (graphene.relay.Node,)
-
-
-class ModalityType(SQLAlchemyObjectType):
-    class Meta:
-        model = ModalityModel
-        interfaces = (graphene.relay.Node,)
-
-
-class PositionType(SQLAlchemyObjectType):
-    class Meta:
-        model = PositionModel
-        interfaces = (graphene.relay.Node,)
 
 
 class GeneralKnowledgeType(SQLAlchemyObjectType):

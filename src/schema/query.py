@@ -1,24 +1,11 @@
 import graphene
-from src.schema.types import (
-    ApplicantType,
-    TechSkillType,
-    PositionType
-)
+
+from src.applicants import all_applicants
+from src.positions.schema.queries import all_positions
+from src.tech_skills.schema.queries import all_tech_skills
 
 
 class Query(graphene.ObjectType):
-    applicants = graphene.List(ApplicantType)
-    tech_skills = graphene.List(TechSkillType)
-    positions = graphene.List(PositionType)
-
-    def resolve_applicants(self, info):
-        query = ApplicantType.get_query(info)
-        return query.all()
-
-    def resolve_tech_skills(self, info):
-        query = TechSkillType.get_query(info)
-        return query.all()
-
-    def resolve_positions(self, info):
-        query = PositionType.get_query(info)
-        return query.all()
+    applicants = all_applicants
+    tech_skills = all_tech_skills
+    positions = all_positions

@@ -6,8 +6,9 @@ Create Date: 2020-02-19 22:06:36.720658
 
 """
 from datetime import datetime
-from alembic import op
+
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '5b22512ba79b'

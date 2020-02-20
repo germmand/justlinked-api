@@ -1,9 +1,8 @@
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
-from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -17,7 +16,7 @@ import sys, os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-import src.database.config as my_config
+import src.core.config.config as my_config
 
 config.set_main_option('sqlalchemy.url', my_config.DATABASE_URI)
 
@@ -25,7 +24,7 @@ config.set_main_option('sqlalchemy.url', my_config.DATABASE_URI)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from src.database.models import Base
+from src.core.models import Base
 
 target_metadata = Base.metadata
 

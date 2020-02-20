@@ -6,8 +6,8 @@ Create Date: 2020-02-20 07:51:37.372092
 
 """
 from datetime import datetime
-from random import choice, randrange
 from os import environ
+from random import choice, randrange
 
 import sqlalchemy as sa
 from alembic import op

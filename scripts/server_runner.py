@@ -1,5 +1,6 @@
-import uvicorn as asgi
 from os import environ
+
+import uvicorn as asgi
 
 from src import app
 from .alembic_helper import upgrade_latest
