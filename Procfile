@@ -1,1 +1,1 @@
-web: cd justlinked-api && alembic upgrade head && gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+web: alembic upgrade head && gunicorn -w 4 -k uvicorn.workers.UvicornWorker scripts.server_runner:run_production

@@ -4,3 +4,4 @@ venv/
 # Just in case SQLite is used instead of PostgreSQL.
 justlinked.db
 .idea
+.env
