@@ -1,3 +1,5 @@
+from sqlite3 import DatabaseError
+
 import graphene
 from database.models import (
     ApplicantModel
@@ -13,6 +15,8 @@ class ApplicantInput(graphene.InputObjectType):
     address = graphene.String(required=True)
     country_of_residence = graphene.String(required=True)
     nacionality = graphene.String(required=True)
+    email = graphene.String(required=True)
+    salary_expectancy = graphene.Float(required=True)
 
 
 class CreateApplicant(graphene.Mutation):
@@ -23,17 +27,13 @@ class CreateApplicant(graphene.Mutation):
     applicant = graphene.Field(lambda: ApplicantType)
 
     def mutate(root, info, applicant_data=None):
-        applicant = ApplicantModel(
-            fullname=applicant_data.fullname,
-            age=applicant_data.age,
-            address=applicant_data.address,
-            country_of_residence=applicant_data.country_of_residence,
-            nacionality=applicant_data.nacionality
-        )
-        # TODO: Validar que se agregó correctamente.
-        applicant.save()
-        ok = True
-        return CreateApplicant(applicant=applicant, ok=ok)
+        applicant = ApplicantModel(**applicant_data)
+        try:
+            applicant.save()
+        except DatabaseError as e:
+            applicant.__rollback()
+            return CreateApplicant(applicant=None, ok=False, errors=str(e))
+        return CreateApplicant(applicant=applicant, ok=True)
 
 
 class Mutation(graphene.ObjectType):

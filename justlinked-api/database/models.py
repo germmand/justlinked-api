@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Table, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Table, ForeignKey, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship
 
@@ -45,12 +45,14 @@ PositionTechSkills = Table('position_tech_skills', Base.metadata,
 class ApplicantModel(Base):
     __tablename__ = 'applicants'
 
-    fullname = Column(String)
-    age = Column(Integer)
-    address = Column(String)
+    fullname = Column(String, nullable=False)
+    age = Column(Integer, nullable=False)
+    address = Column(String, nullable=False)
     country_of_residence = Column(String)
-    nacionality = Column(String)
+    email = Column(String, unique=True, nullable=False)
+    nacionality = Column(String, nullable=False)
     modality_id = Column(Integer, ForeignKey('modality.id'))
+    salary_expectancy = Column(Float, nullable=False)
 
 
 class PositionModel(Base):
