@@ -1,0 +1,1 @@
+web: cd justlinked-api && alembic upgrade latest && gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
