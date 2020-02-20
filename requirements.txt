@@ -1,6 +1,7 @@
 alembic==1.4.0
 aniso8601==7.0.0
 Click==7.0
+colorama==0.4.3
 Faker==4.0.1
 fastapi==0.48.0
 graphene==2.1.8
