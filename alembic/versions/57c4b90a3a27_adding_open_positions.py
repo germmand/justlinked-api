@@ -7,6 +7,7 @@ Create Date: 2020-02-20 07:51:37.372092
 """
 from datetime import datetime
 from random import choice, randrange
+from os import environ
 
 import sqlalchemy as sa
 from alembic import op
@@ -24,6 +25,9 @@ max_positions = 100
 
 
 def upgrade():
+    if not environ['GENERATE_DATA']:
+        print('Migration skipped since it adds dummy data, for this migration to run set the GENERATE_DATA env')
+
     positions = []
     fake = Faker()
     fake.add_provider(company)
