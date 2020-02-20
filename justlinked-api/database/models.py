@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Table, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, DateTime, Table, ForeignKey, Boolean, Float, Date
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship
@@ -74,6 +74,7 @@ class ApplicantModel(Base):
     modality_id = Column(Integer, ForeignKey('modality.id'))
     salary_expectancy = Column(Float, nullable=False)
     general_knowledge = relationship("GeneralKnowledge")
+    work_experience = relationship("WorkExperience")
 
 
 class PositionModel(Base):
@@ -102,4 +103,14 @@ class GeneralKnowledge(Base):
     __tablename__ = 'general_knowledge'
 
     description = Column(String(length=255), nullable=False)
+    applicant_id = Column(Integer, ForeignKey('applicants.id'))
+
+
+class WorkExperience(Base):
+    __tablename__ = 'work_experience'
+
+    name = Column(String(100), nullable=False)
+    description = Column(String(length=255), nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
     applicant_id = Column(Integer, ForeignKey('applicants.id'))

@@ -4,7 +4,7 @@ import graphene
 
 from database.models import (
     ApplicantModel,
-    GeneralKnowledge)
+    GeneralKnowledge, WorkExperience)
 from schema.types import (
     ApplicantType
 )
@@ -12,6 +12,13 @@ from schema.types import (
 
 class GeneralKnowledgeInput(graphene.InputObjectType):
     description = graphene.String(required=True)
+
+
+class WorkExperienceInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    description = graphene.String(required=True)
+    start_date = graphene.Date(required=True)
+    end_date = graphene.Date(required=True)
 
 
 class ApplicantInput(graphene.InputObjectType):
@@ -23,6 +30,7 @@ class ApplicantInput(graphene.InputObjectType):
     email = graphene.String(required=True)
     salary_expectancy = graphene.Float(required=True)
     general_knowledge = graphene.List(GeneralKnowledgeInput)
+    work_experience = graphene.List(WorkExperienceInput)
 
 
 class CreateApplicant(graphene.Mutation):
@@ -34,14 +42,18 @@ class CreateApplicant(graphene.Mutation):
 
     def mutate(root, info, applicant_data=None):
         general_knowledge = applicant_data.pop('general_knowledge')
+        work_experience = applicant_data.pop('work_experience')
 
         applicant = ApplicantModel(**applicant_data)
 
         for k in general_knowledge:
             applicant.general_knowledge.append(GeneralKnowledge(**k))
+        for we in work_experience:
+            applicant.work_experience.append(WorkExperience(**we))
         try:
             applicant.save()
             [k.save() for k in applicant.general_knowledge]
+            [we.save() for we in applicant.work_experience]
         except DatabaseError as e:
             applicant.__rollback()
             return CreateApplicant(applicant=None, ok=False, errors=str(e))
