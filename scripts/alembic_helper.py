@@ -48,6 +48,6 @@ def generate_migration(revision=None, autogenerate=True):
 
 
 def run_with_dummy_data(fun: Callable):
-    environ.setdefault('GENERATE_DATA', True)
+    environ.setdefault('GENERATE_DATA', str(True))
     fun()
     del environ['GENERATE_DATA']
