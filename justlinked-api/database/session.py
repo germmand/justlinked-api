@@ -1,5 +1,5 @@
 from sqlalchemy.orm import (
-    sessionmaker, 
+    sessionmaker,
     scoped_session
 )
 from database.engine import engine

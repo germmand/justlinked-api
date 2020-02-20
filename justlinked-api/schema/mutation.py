@@ -6,12 +6,14 @@ from schema.types import (
     ApplicantType
 )
 
+
 class ApplicantInput(graphene.InputObjectType):
     fullname = graphene.String(required=True)
     age = graphene.Int(required=True)
     address = graphene.String(required=True)
     country_of_residence = graphene.String(required=True)
     nacionality = graphene.String(required=True)
+
 
 class CreateApplicant(graphene.Mutation):
     class Arguments:
@@ -32,6 +34,7 @@ class CreateApplicant(graphene.Mutation):
         applicant.save()
         ok = True
         return CreateApplicant(applicant=applicant, ok=ok)
+
 
 class Mutation(graphene.ObjectType):
     create_applicant = CreateApplicant.Field()

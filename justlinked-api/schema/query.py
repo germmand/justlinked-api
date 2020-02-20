@@ -4,6 +4,7 @@ from schema.types import (
     TechSkillType
 )
 
+
 class Query(graphene.ObjectType):
     applicants = graphene.List(ApplicantType)
     tech_skills = graphene.List(TechSkillType)
