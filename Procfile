@@ -1,1 +1,1 @@
-web: alembic upgrade head && gunicorn -w 4 -k uvicorn.workers.UvicornWorker scripts.server_runner:run_production
+web: alembic upgrade head && gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.server:app
