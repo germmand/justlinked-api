@@ -1,12 +1,7 @@
-from sqlalchemy import String, Column, Integer, ForeignKey, Float, Table
+from sqlalchemy import String, Column, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
 from src.core.models import Base
-
-ApplicantTechSkills = Table('applicants_tech_skills', Base.metadata,
-                            Column('applicant_id', Integer, ForeignKey('applicants.id')),
-                            Column('techskill_id', Integer, ForeignKey('techskills.id')),
-                            Column('experience_years', Integer))
 
 
 class ApplicantModel(Base):
@@ -22,4 +17,3 @@ class ApplicantModel(Base):
     salary_expectancy = Column(Float, nullable=False)
     general_knowledge = relationship("GeneralKnowledge")
     work_experience = relationship("WorkExperience")
-    tech_skills = relationship('TechSkillModel', secondary=ApplicantTechSkills)
