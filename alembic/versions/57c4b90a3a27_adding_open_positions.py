@@ -25,8 +25,9 @@ max_positions = 100
 
 
 def upgrade():
-    if not environ['GENERATE_DATA']:
+    if not 'GENERATE_DATA' in environ:
         print('Migration skipped since it adds dummy data, for this migration to run set the GENERATE_DATA env')
+        return
 
     positions = []
     fake = Faker()
