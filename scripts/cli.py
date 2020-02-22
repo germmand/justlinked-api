@@ -13,14 +13,13 @@ def cli():
 @click.option('--port', default=8000, help='Puerto para correr la app', type=click.IntRange(0, 52000),
               show_default=True)
 @click.option('--host', default='localhost', help='Host para correr la app', type=click.STRING)
-@click.option('--with-migrations', default=False, show_default=True, type=click.BOOL,
+@click.option('--with-migrations', default=False, show_default=True, is_flag=True,
               help='Ejecuta la última migración de la db')
-@click.option('--with-fake-data', default=False, show_default=True, type=click.BOOL, help='Generar data de prueba')
+@click.option('--with-fake-data', default=False, show_default=True, is_flag=True, help='Generar data de prueba')
 def run(port, host, with_migrations, with_fake_data):
     """Ejecuta el servicor de desarrollo"""
     if with_migrations:
         upgrade_latest(with_fake_data)
-
     from .server_runner import run_app
     from src import app
     return run_app(app, port, host)
