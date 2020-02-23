@@ -1,0 +1,82 @@
+version: 2.1
+
+references:
+  api_working_directory: &api_working_directory
+    ~/justlinked-api
+  deps_cache_key: &deps_cache_key
+    deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
+executors:
+  api-executor:
+    working_directory: *api_working_directory
+    docker:
+      - image: circleci/python:3.8.1
+        environment:
+          DATABASE_URL: postgresql+psycopg2://root@localhost:5432/circleci_testdb
+      - image: circleci/postgres:9.6.9
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circleci_testdb
+          POSTGRES_PASSWORD: ''
+
+jobs:
+  build:
+    executor: api-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: *deps_cache_key
+      - run:
+          name: Installing dependencies
+          command: |
+            python3 -m venv .venv
+            source .venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          key: *deps_cache_key
+          paths:
+            - ".venv"
+      - persist_to_workspace:
+          root: *api_working_directory
+          paths:
+            - .
+
+  test:
+    executor: api-executor
+    steps:
+      - attach_workspace:
+          at: *api_working_directory
+      - run:
+          name: Running test suite
+          command: |
+            source .venv/bin/activate
+            pytest
+      - store_artifacts:
+          path: test-reports/
+          destination: pytest-reports
+      - store_test_results:
+          path: test-reports/
+
+  deploy:
+    executor: api-executor
+    steps:
+      - attach_workspace:
+          at: *api_working_directory
+      - run:
+          name: Setting up Heroku
+          command: echo "Not really setting it up yet..."
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
