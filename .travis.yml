@@ -12,3 +12,8 @@ before_script:
   - psql -c 'create database justlinked_travis_db;' -U postgres
 script:
   - pytest
+deploy:
+  provider: heroku
+  api_key: '$HEROKU_AUTH_TOKEN'
+  app:
+    master: justlinked-api2
