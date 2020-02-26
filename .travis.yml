@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.8"
+addons:
+  postgresql: "10.12"
+env:
+  global:
+    - DATABASE_URL=postgresql+psycopg2://postgres@localhost:5432/justlinked_travis_db
+install:
+  - pip install -r requirements.txt
+before_script:
+  - psql -c 'create database justlinked_travis_db;' -U postgres
+script:
+  - pytest
