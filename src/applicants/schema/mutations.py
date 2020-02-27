@@ -1,8 +1,11 @@
 import graphene
+from graphql import GraphQLError
 from sqlalchemy.exc import DatabaseError
 
+from src.core.config import db_session
 from src.applicants.models import ApplicantModel, GeneralKnowledge, WorkExperience
 from src.applicants.schema.types import ApplicantType
+from src.tech_skills.models import ApplicantTechSkills
 
 
 class GeneralKnowledgeInput(graphene.InputObjectType):
@@ -16,6 +19,11 @@ class WorkExperienceInput(graphene.InputObjectType):
     end_date = graphene.Date(required=True)
 
 
+class ApplicantTechSkillInput(graphene.InputObjectType):
+    skill_id = graphene.Int(required=True)
+    experience_years = graphene.Int(required=True)
+
+
 class ApplicantInput(graphene.InputObjectType):
     fullname = graphene.String(required=True)
     age = graphene.Int(required=True)
@@ -24,8 +32,9 @@ class ApplicantInput(graphene.InputObjectType):
     nacionality = graphene.String(required=True)
     email = graphene.String(required=True)
     salary_expectancy = graphene.Float(required=True)
-    general_knowledge = graphene.List(GeneralKnowledgeInput)
-    work_experience = graphene.List(WorkExperienceInput)
+    general_knowledge = graphene.List(GeneralKnowledgeInput, required=True)
+    work_experience = graphene.List(WorkExperienceInput, required=True)
+    tech_skills = graphene.List(ApplicantTechSkillInput, required=True)
 
 
 class CreateApplicant(graphene.Mutation):
@@ -38,6 +47,7 @@ class CreateApplicant(graphene.Mutation):
     def mutate(root, info, applicant_data=None):
         general_knowledge = applicant_data.pop('general_knowledge')
         work_experience = applicant_data.pop('work_experience')
+        tech_skills = applicant_data.pop('tech_skills')
 
         applicant = ApplicantModel(**applicant_data)
 
@@ -45,11 +55,17 @@ class CreateApplicant(graphene.Mutation):
             applicant.general_knowledge.append(GeneralKnowledge(**k))
         for we in work_experience:
             applicant.work_experience.append(WorkExperience(**we))
+
         try:
             applicant.save()
             [k.save() for k in applicant.general_knowledge]
             [we.save() for we in applicant.work_experience]
+            [
+                ApplicantTechSkills(**{'applicant_id': applicant.id, 'techskill_id': tk.skill_id,
+                                       'experience_years': tk.experience_years}).save()
+                for tk in tech_skills
+            ]
+            db_session.flush()
         except DatabaseError as e:
-            applicant.__rollback()
-            return CreateApplicant(applicant=None, ok=False, errors=str(e))
+            raise GraphQLError(message=e)
         return CreateApplicant(applicant=applicant, ok=True)
