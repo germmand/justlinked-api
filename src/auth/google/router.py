@@ -6,13 +6,15 @@ from starlette.responses import RedirectResponse
 
 from .utils import create_google_auth_server_url
 
+from src.core.config.config import Config
+
 router = APIRouter()
 
 # Esto se tiene que refactorizar cañon pero ya sirve gg
 
 @router.get("/login/google", tags=["external_login"])
 async def get_google_auth_server_url():
-    redirect_uri = 'http://localhost:8000' + router.url_path_for('handle_google_login_response')
+    redirect_uri = Config.HOST + router.url_path_for('handle_google_login_response')
     client_id = os.environ["GOOGLE_CLIENT_ID"]
     scopes = ['https://www.googleapis.com/auth/contacts.readonly', 
               'https://www.googleapis.com/auth/user.addresses.read',
@@ -31,7 +33,7 @@ async def handle_google_login_response(code = None, error = None):
     if error is not None:
         return {'error': error}
     url = 'https://oauth2.googleapis.com/token'
-    redirect_uri = 'http://localhost:8000' + router.url_path_for('handle_google_login_response')
+    redirect_uri = Config.HOST + router.url_path_for('handle_google_login_response')
     params = {
         'client_id': os.environ["GOOGLE_CLIENT_ID"],
         'client_secret': os.environ["GOOGLE_CLIENT_SECRET"],
