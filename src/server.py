@@ -4,8 +4,11 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.schema import schema
 
+from src.auth.google import router as google_router
+
 app = FastAPI()
 app.add_route("/", GraphQLApp(schema=schema))
+app.include_router(google_router)
 
 app.add_middleware(
     CORSMiddleware,
