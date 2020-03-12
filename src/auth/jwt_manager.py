@@ -9,11 +9,11 @@ class JwtManager(object):
 
     def encode_access_token(self, user_claims):
         # We add this method instead of calling ___encode_jwt
-        # to provide the type of token we're generating, in this case 'access' token.
-        # This is done so that maybe in the future if we want to generate another type such as refresh tokens
+        # to provide the type of token we're generating, in this case 'Bearer' token.
+        # This is done like this so that maybe in the future if we want to generate another type such as refresh tokens
         # we could provide the type and delegate the rest to __encode_jwt.
         token_data = {
-            'type': 'access'
+            'type': 'Bearer'
         }
         token_data[self._user_claims_key] = user_claims
         return self.__encode_jwt(token_data)
