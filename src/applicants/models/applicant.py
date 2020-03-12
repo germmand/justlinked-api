@@ -18,3 +18,10 @@ class ApplicantModel(Base):
     salary_expectancy = Column(Float)
     general_knowledge = relationship("GeneralKnowledge")
     work_experience = relationship("WorkExperience")
+
+    def get_token_claims(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'fullname': self.fullname,
+        }

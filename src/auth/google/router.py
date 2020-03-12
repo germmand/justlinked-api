@@ -9,6 +9,7 @@ from .service import GoogleApplicantService
 
 from src.core.config.config import Config
 from src.core.config.session import db_session
+from src.auth import JWTManager
 
 router = APIRouter()
 redirect_uri = Config.HOST + '/login/google/callback'
@@ -32,4 +33,8 @@ async def handle_google_login_response(code = None, error = None):
     access_token = google_tokens_response.json()["access_token"]
     google_user_data = google_auth.get_user_data(access_token, ['names', 'addresses', 'residences', 'emailAddresses', 'birthdays', 'photos'])
     applicant = google_applicant_service.obtain_applicant(google_user_data.json())
-    return { 'email': applicant.email, 'success': True }
+    applicant_access_token = JWTManager.encode_access_token(applicant.get_token_claims())
+    return {
+        'access_token': applicant_access_token,
+        'expires_in': 'Never :)'
+    }

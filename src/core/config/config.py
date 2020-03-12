@@ -8,6 +8,7 @@ class Config(object):
     WEBCLIENT_HOST = 'http://localhost'
     GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
     GOOGLE_CLIENT_SECRET = os.environ["GOOGLE_CLIENT_SECRET"]
+    JWT_SECRET = os.environ["JWT_SECRET"]
 
 class DevelopmentConfig(Config):
     DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///justlinked.db")
