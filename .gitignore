@@ -5,3 +5,5 @@ venv/
 **/justlinked.db
 .idea
 .env
+.vscode
+**/*.pyc

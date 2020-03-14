@@ -16,9 +16,9 @@ import sys, os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-import src.core.config.config as my_config
+import src.core.config.config as custom_config
 
-core_config.set_main_option('sqlalchemy.url', my_config.DATABASE_URI)
+core_config.set_main_option('sqlalchemy.url', custom_config.Config.DATABASE_URI)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
