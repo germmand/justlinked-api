@@ -10,33 +10,32 @@ class GoogleOAuth2(object):
               'https://www.googleapis.com/auth/userinfo.email',
               'https://www.googleapis.com/auth/userinfo.profile']
 
-    def __init__(self, client_id, client_secret, http, redirect_uri):
+    def __init__(self, client_id, client_secret, http):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.redirect_uri = redirect_uri
         self.http = http
 
-    def assemble_auth_server_url(self):
+    def assemble_auth_server_url(self, redirect_uri):
         url = 'https://accounts.google.com/o/oauth2/v2/auth'
         params = {
             'client_id': self.client_id,
             'access_type': 'offline',
             'response_type': 'code',
             'include_granted_scopes': 'true',
-            'redirect_uri': self.redirect_uri,
+            'redirect_uri': redirect_uri,
             'scope': ' '.join(self.SCOPES)
         }
         params = urlencode(params)
         return '{}?{}'.format(url, params)
 
-    def get_tokens(self, code):
+    def get_tokens(self, code, redirect_uri):
         url = 'https://oauth2.googleapis.com/token'
         params = {
             'client_id': self.client_id,
             'client_secret': self.client_secret,
             'grant_type': 'authorization_code',
             'code': code,
-            'redirect_uri': self.redirect_uri
+            'redirect_uri': redirect_uri
         }
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
